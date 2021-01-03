@@ -60,6 +60,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * @author Rossen Stoyanchev
  * @author Juergen Hoeller
  * @since 3.1
+ *
+ * 解析namedValue类型的参数，（有name的参数，如cookie,requestParam,requestHandler,pathVariable）
  */
 public abstract class AbstractNamedValueMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -95,8 +97,10 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
 		NamedValueInfo namedValueInfo = getNamedValueInfo(parameter);
+		// 如果 parameter 是内嵌类型的，则获取内嵌的参数。否则，还是使用 parameter 自身
 		MethodParameter nestedParameter = parameter.nestedIfOptional();
 
+		// 如果 name 是占位符，则进行解析成对应的值
 		Object resolvedName = resolveStringValue(namedValueInfo.name);
 		if (resolvedName == null) {
 			throw new IllegalArgumentException(
@@ -118,6 +122,7 @@ public abstract class AbstractNamedValueMethodArgumentResolver implements Handle
 		}
 
 		if (binderFactory != null) {
+			// 执行值的类型转换
 			WebDataBinder binder = binderFactory.createBinder(webRequest, null, namedValueInfo.name);
 			try {
 				arg = binder.convertIfNecessary(arg, parameter.getParameterType(), parameter);

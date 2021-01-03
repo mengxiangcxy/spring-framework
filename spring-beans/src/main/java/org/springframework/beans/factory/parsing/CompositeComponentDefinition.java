@@ -30,6 +30,7 @@ import org.springframework.util.Assert;
  * @author Juergen Hoeller
  * @since 2.0.1
  * @see #getNestedComponents()
+ * Composite : 复合的
  */
 public class CompositeComponentDefinition extends AbstractComponentDefinition {
 

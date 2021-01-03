@@ -108,6 +108,10 @@ import org.springframework.util.ReflectionUtils;
  * @since 3.1
  * @see #onStartup(Set, ServletContext)
  * @see WebApplicationInitializer
+ *
+ * //这个注解声明了 WebApplicationInitializer类，
+ * //那么servlet容器会把类路径下所有WebApplicationInitializer的实现类及其子类添加到onStratup方法的第一个参数中
+ * // servlet容器会调用这个类的onStartup方法
  */
 @HandlesTypes(WebApplicationInitializer.class)
 public class SpringServletContainerInitializer implements ServletContainerInitializer {
@@ -148,6 +152,9 @@ public class SpringServletContainerInitializer implements ServletContainerInitia
 			for (Class<?> waiClass : webAppInitializerClasses) {
 				// Be defensive: Some servlet containers provide us with invalid classes,
 				// no matter what @HandlesTypes says...
+				// 它提示我们由于 servlet 厂商实现的差异，onStartup 方法会加载我们本不想处理的 class，所以进行了特判。
+				// 另外，也要注意下 @HandlesTypes(WebApplicationInitializer.class) 注解，如果厂商正确的实现 @HandlesTypes 的逻辑，
+				// 传入的 Set<Class<?>> webAppInitializerClasses 都是 WebApplicationInitializer 对象。
 				if (!waiClass.isInterface() && !Modifier.isAbstract(waiClass.getModifiers()) &&
 						WebApplicationInitializer.class.isAssignableFrom(waiClass)) {
 					try {

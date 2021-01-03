@@ -130,7 +130,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	}
 
 
-	/** Map from serialized id to factory instance */
+	/** Map from serialized id to factory instance 序列化ID映射到工厂实例的Map */
 	private static final Map<String, Reference<DefaultListableBeanFactory>> serializableFactories =
 			new ConcurrentHashMap<>(8);
 
@@ -138,42 +138,54 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Nullable
 	private String serializationId;
 
-	/** Whether to allow re-registration of a different definition with the same name */
+	/** Whether to allow re-registration of a different definition with the same name
+	 * 是否允许同名字不同定义的bean重新注册 */
 	private boolean allowBeanDefinitionOverriding = true;
 
-	/** Whether to allow eager class loading even for lazy-init beans */
+	/** Whether to allow eager class loading even for lazy-init beans
+	 * 是否允许bean基至是延迟加载的bean马上加载*/
 	private boolean allowEagerClassLoading = true;
 
-	/** Optional OrderComparator for dependency Lists and arrays */
+	/** Optional OrderComparator for dependency Lists and arrays
+	 * 可选的用于依赖集合和数组的比较器*/
 	@Nullable
 	private Comparator<Object> dependencyComparator;
 
-	/** Resolver to use for checking if a bean definition is an autowire candidate */
+	/** Resolver to use for checking if a bean definition is an autowire candidate
+	 * 用于检查一个类定义是否有自动注入请求的解析器*/
 	private AutowireCandidateResolver autowireCandidateResolver = new SimpleAutowireCandidateResolver();
 
-	/** Map from dependency type to corresponding autowired value */
+	/** Map from dependency type to corresponding autowired value
+	 * 依赖类型到对应的注入值的映射*/
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
 
-	/** Map of bean definition objects, keyed by bean name */
+	/** Map of bean definition objects, keyed by bean name
+	 * bean定义名字到bean定义数据实体的映射*/
 	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
 
-	/** Map of singleton and non-singleton bean names, keyed by dependency type */
+	/** Map of singleton and non-singleton bean names, keyed by dependency type
+	 * 依赖类型到对应bean名字的映射，包括单例和非单例*/
 	private final Map<Class<?>, String[]> allBeanNamesByType = new ConcurrentHashMap<>(64);
 
-	/** Map of singleton-only bean names, keyed by dependency type */
+	/** Map of singleton-only bean names, keyed by dependency type
+	 * 依赖类型到对应bean名字的映射，仅包含单例*/
 	private final Map<Class<?>, String[]> singletonBeanNamesByType = new ConcurrentHashMap<>(64);
 
-	/** List of bean definition names, in registration order */
+	/** List of bean definition names, in registration order
+	 * 所有bean定义的名字的集合，按注册次序*/
 	private volatile List<String> beanDefinitionNames = new ArrayList<>(256);
 
-	/** List of names of manually registered singletons, in registration order */
+	/** List of names of manually registered singletons, in registration order
+	 * 手工注册的单例bean定义的名字的集合，按注册次序*/
 	private volatile Set<String> manualSingletonNames = new LinkedHashSet<>(16);
 
-	/** Cached array of bean definition names in case of frozen configuration */
+	/** Cached array of bean definition names in case of frozen configuration
+	 * 缓存bean定义名字的数组*/
 	@Nullable
 	private volatile String[] frozenBeanDefinitionNames;
 
-	/** Whether bean definition metadata may be cached for all beans */
+	/** Whether bean definition metadata may be cached for all beans
+	 * 是否允许bean定义的元数据被缓存，以用于所有的bean*/
 	private volatile boolean configurationFrozen = false;
 
 
@@ -828,7 +840,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			this.beanDefinitionMap.put(beanName, beanDefinition);
 		}
-		else {
+		else {// 检测创建 Bean 阶段是否已经开启，如果开启了则需要对 beanDefinitionMap 进行并发控制
 			if (hasBeanCreationStarted()) {
 				// Cannot modify startup-time collection elements anymore (for stable iteration)
 				synchronized (this.beanDefinitionMap) {
@@ -852,7 +864,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			}
 			this.frozenBeanDefinitionNames = null;
 		}
-
+		// 重置beanName对应的缓存
 		if (existingDefinition != null || containsSingleton(beanName)) {
 			resetBeanDefinition(beanName);
 		}

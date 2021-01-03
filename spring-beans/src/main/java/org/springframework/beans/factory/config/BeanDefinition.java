@@ -57,6 +57,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Role hint indicating that a {@code BeanDefinition} is a major part
 	 * of the application. Typically corresponds to a user-defined bean.
+	 * //表示BeanDefinition是应用程序主要部分的角色提示。 通常对应于用户定义的bean。
 	 */
 	int ROLE_APPLICATION = 0;
 
@@ -68,6 +69,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * of when looking more closely at a particular
 	 * {@link org.springframework.beans.factory.parsing.ComponentDefinition},
 	 * but not when looking at the overall configuration of an application.
+	 * 实际上就是说，我这个Bean是用户的，是从配置文件中过来的。
 	 */
 	int ROLE_SUPPORT = 1;
 
@@ -76,6 +78,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * entirely background role and has no relevance to the end-user. This hint is
 	 * used when registering beans that are completely part of the internal workings
 	 * of a {@link org.springframework.beans.factory.parsing.ComponentDefinition}.
+	 * 这个提示用于注册完全是ComponentDefinition内部工作的一部分的bean
+	 * 就是我这Bean是Spring自己的，和你用户没有一毛钱关系。
 	 */
 	int ROLE_INFRASTRUCTURE = 2;
 
@@ -293,6 +297,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Allows for retrieving the decorated bean definition, if any.
 	 * <p>Note that this method returns the immediate originator. Iterate through the
 	 * originator chain to find the original BeanDefinition as defined by the user.
+	 * 若这个Bean定义被代理、修饰过  这个方法可以返回原始的
 	 */
 	@Nullable
 	BeanDefinition getOriginatingBeanDefinition();

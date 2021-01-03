@@ -69,14 +69,16 @@ public class MethodParameter {
 
 	@Nullable
 	private volatile Parameter parameter;
-
+	// 嵌套级别
 	private int nestingLevel;
 
 	/** Map from Integer level to Integer type index */
+	// 保存每层嵌套参数的序号
 	@Nullable
 	Map<Integer, Integer> typeIndexesPerLevel;
 
 	/** The containing class. Could also be supplied by overriding {@link #getContainingClass()} */
+	// 容器类型，也就是参数所在方法的类
 	@Nullable
 	private volatile Class<?> containingClass;
 
@@ -88,7 +90,7 @@ public class MethodParameter {
 
 	@Nullable
 	private volatile Annotation[] parameterAnnotations;
-
+	// 参数名称查找器
 	@Nullable
 	private volatile ParameterNameDiscoverer parameterNameDiscoverer;
 

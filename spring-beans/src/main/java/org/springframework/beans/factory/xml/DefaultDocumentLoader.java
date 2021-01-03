@@ -63,7 +63,7 @@ public class DefaultDocumentLoader implements DocumentLoader {
 
 	/**
 	 * Load the {@link Document} at the supplied {@link InputSource} using the standard JAXP-configured
-	 * XML parser.
+	 * XML parser.  	EntityResolver 的重点，是在于如何获取【验证文件】，验证xml是否正确
 	 */
 	@Override
 	public Document loadDocument(InputSource inputSource, EntityResolver entityResolver,
@@ -90,7 +90,7 @@ public class DefaultDocumentLoader implements DocumentLoader {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(namespaceAware);
-
+		// 没有验证模式 退出
 		if (validationMode != XmlValidationModeDetector.VALIDATION_NONE) {
 			factory.setValidating(true);
 			if (validationMode == XmlValidationModeDetector.VALIDATION_XSD) {

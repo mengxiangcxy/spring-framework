@@ -35,6 +35,8 @@ import org.springframework.util.ObjectUtils;
  * @since 4.1
  * @see AbstractAdvisingBeanPostProcessor
  * @see org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator
+ *
+ * 自动创建代理的类之一
  */
 @SuppressWarnings("serial")
 public class ProxyProcessorSupport extends ProxyConfig implements Ordered, BeanClassLoaderAware, AopInfrastructureBean {

@@ -61,6 +61,8 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author Arjen Poutsma
  * @author Juergen Hoeller
  * @since 3.1
+ *
+ * 解析@PathVariable,且参数不是Map类型的， Map类型的见{@link PathVariableMapMethodArgumentResolver}
  */
 public class PathVariableMethodArgumentResolver extends AbstractNamedValueMethodArgumentResolver
 		implements UriComponentsContributor {

@@ -81,6 +81,8 @@ public abstract class TransactionSynchronizationManager {
 	private static final ThreadLocal<Map<Object, Object>> resources =
 			new NamedThreadLocal<>("Transactional resources");
 
+	// 使用的同步器，用于应用扩展  类似于回调函数，在某些固定的点时，会这行这里面注册的函数
+	// TransactionSynchronization同步器是最为重要的一个扩展点~~~ 这里是个set 所以每个线程都可以注册N多个同步器
 	private static final ThreadLocal<Set<TransactionSynchronization>> synchronizations =
 			new NamedThreadLocal<>("Transaction synchronizations");
 
@@ -260,6 +262,7 @@ public abstract class TransactionSynchronizationManager {
 	 * Return if transaction synchronization is active for the current thread.
 	 * Can be called before register to avoid unnecessary instance creation.
 	 * @see #registerSynchronization
+	 * 	// 同步器是否是激活状态~~~  若是激活状态就可以执行同步器里的相关回调方法了
 	 */
 	public static boolean isSynchronizationActive() {
 		return (synchronizations.get() != null);
@@ -269,6 +272,7 @@ public abstract class TransactionSynchronizationManager {
 	 * Activate transaction synchronization for the current thread.
 	 * Called by a transaction manager on transaction begin.
 	 * @throws IllegalStateException if synchronization is already active
+	 * 	// 如果事务已经开启了，就不能再初始化同步器了  而是直接注册
 	 */
 	public static void initSynchronization() throws IllegalStateException {
 		if (isSynchronizationActive()) {

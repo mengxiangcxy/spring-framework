@@ -37,6 +37,7 @@ import org.springframework.util.ReflectionUtils;
  * @author Juergen Hoeller
  * @author Rossen Stoyanchev
  * @since 4.2.3
+ * Introspector : 内省
  */
 public abstract class MethodIntrospector {
 

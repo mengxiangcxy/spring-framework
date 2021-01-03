@@ -74,7 +74,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 								registeredName + "' with new target name '" + name + "'");
 					}
 				}
-				checkForAliasCircle(name, alias);
+				checkForAliasCircle(name, alias);// 验证是否存在循环指向
 				this.aliasMap.put(alias, name);
 				if (logger.isDebugEnabled()) {
 					logger.debug("Alias definition '" + alias + "' registered for name '" + name + "'");

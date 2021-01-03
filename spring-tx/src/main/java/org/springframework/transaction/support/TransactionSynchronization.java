@@ -34,6 +34,9 @@ import java.io.Flushable;
  * @see TransactionSynchronizationManager
  * @see AbstractPlatformTransactionManager
  * @see org.springframework.jdbc.datasource.DataSourceUtils#CONNECTION_SYNCHRONIZATION_ORDER
+ *
+ * 事务同步器
+ * 这个类非常的重要，它是我们程序员对事务同步的扩展点：用于事务同步回调的接口
  */
 public interface TransactionSynchronization extends Flushable {
 

@@ -41,6 +41,8 @@ import org.springframework.web.servlet.ModelAndView;
  * @author Rossen Stoyanchev
  * @author Brian Clozel
  * @since 3.0
+ *
+ * 会根据请求路径做匹配，是否进行拦截
  */
 public final class MappedInterceptor implements HandlerInterceptor {
 

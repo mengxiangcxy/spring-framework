@@ -42,6 +42,8 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev
  * @since 3.1
+ *
+ * 解析@RequestHeader且类型不是Map的， map的{@link RequestHeaderMapMethodArgumentResolver}
  */
 public class RequestHeaderMethodArgumentResolver extends AbstractNamedValueMethodArgumentResolver {
 

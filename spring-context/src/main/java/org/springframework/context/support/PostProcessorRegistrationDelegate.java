@@ -299,6 +299,7 @@ final class PostProcessorRegistrationDelegate {
 	 * BeanPostProcessor that logs an info message when a bean is created during
 	 * BeanPostProcessor instantiation, i.e. when a bean is not eligible for
 	 * getting processed by all BeanPostProcessors.
+	 * 在一个Bean不能被所有BeanPostProcessor处理时，会打印信息。比如，当Bean被创建而BeanPostProcessor没有全部初始化完毕时。
 	 */
 	private static final class BeanPostProcessorChecker implements BeanPostProcessor {
 

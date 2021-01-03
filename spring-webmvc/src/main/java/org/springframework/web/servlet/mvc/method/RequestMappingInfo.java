@@ -50,24 +50,26 @@ import org.springframework.web.util.UrlPathHelper;
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev
  * @since 3.1
+ *
+ * 请求匹配信息
  */
 public final class RequestMappingInfo implements RequestCondition<RequestMappingInfo> {
 
 	@Nullable
 	private final String name;
-
+	// 请求路径的条件
 	private final PatternsRequestCondition patternsCondition;
-
+	// 请求方法的条件
 	private final RequestMethodsRequestCondition methodsCondition;
-
+	// 参数的条件
 	private final ParamsRequestCondition paramsCondition;
-
+	// 请求头的条件
 	private final HeadersRequestCondition headersCondition;
-
+	// 可消费的 Content-Type 的条件
 	private final ConsumesRequestCondition consumesCondition;
-
+	// 可生产的 Content-Type 的条件
 	private final ProducesRequestCondition producesCondition;
-
+	// 自定义的条件
 	private final RequestConditionHolder customConditionHolder;
 
 
@@ -224,7 +226,7 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 		if (methods == null || params == null || headers == null || consumes == null || produces == null) {
 			return null;
 		}
-
+		// 匹配 patternsCondition
 		PatternsRequestCondition patterns = this.patternsCondition.getMatchingCondition(request);
 		if (patterns == null) {
 			return null;
@@ -234,7 +236,9 @@ public final class RequestMappingInfo implements RequestCondition<RequestMapping
 		if (custom == null) {
 			return null;
 		}
-
+		// 创建匹配的 RequestMappingInfo 对象。
+		// 为什么要创建 RequestMappingInfo 对象呢？
+		// 因为当前 RequestMappingInfo 对象，一个 methodsCondition 可以配置 GET、POST、DELETE 等等条件，但是实际就匹配一个请求类型，此时 methods 只代表其匹配的那个。
 		return new RequestMappingInfo(this.name, patterns,
 				methods, params, headers, consumes, produces, custom.getCondition());
 	}

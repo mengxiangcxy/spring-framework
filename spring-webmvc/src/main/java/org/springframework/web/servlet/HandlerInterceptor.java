@@ -72,6 +72,8 @@ import org.springframework.web.method.HandlerMethod;
  * @see org.springframework.web.servlet.i18n.LocaleChangeInterceptor
  * @see org.springframework.web.servlet.theme.ThemeChangeInterceptor
  * @see javax.servlet.Filter
+ *
+ * 不做匹配，拦截所有
  */
 public interface HandlerInterceptor {
 

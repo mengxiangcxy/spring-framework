@@ -185,6 +185,7 @@ class ConstructorResolver {
 					continue;
 				}
 
+				// 构造器参数必须存在， 如果没有配置文件中默认指定的参数，则必有传入的参数
 				ArgumentsHolder argsHolder;
 				if (resolvedValues != null) {
 					try {
@@ -356,20 +357,24 @@ class ConstructorResolver {
 	 */
 	public BeanWrapper instantiateUsingFactoryMethod(
 			String beanName, RootBeanDefinition mbd, @Nullable Object[] explicitArgs) {
-
+		// 构建BeanWrapper对象
+		// 向BeanWrapper对象中添加 ConversionService 对象和属性编辑器 PropertyEditor 对象
 		BeanWrapperImpl bw = new BeanWrapperImpl();
 		this.beanFactory.initBeanWrapper(bw);
 
+		// 获得 factoryBean、factoryClass、isStatic、factoryBeanName 属性
 		Object factoryBean;
 		Class<?> factoryClass;
 		boolean isStatic;
 
+		// 要么是实例工厂，要么是静态工厂
 		String factoryBeanName = mbd.getFactoryBeanName();
 		if (factoryBeanName != null) {
 			if (factoryBeanName.equals(beanName)) {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"factory-bean reference points back to the same bean definition");
 			}
+			// 获取工厂实例
 			factoryBean = this.beanFactory.getBean(factoryBeanName);
 			if (mbd.isSingleton() && this.beanFactory.containsSingleton(beanName)) {
 				throw new ImplicitlyAppearedSingletonException();
@@ -379,6 +384,8 @@ class ConstructorResolver {
 		}
 		else {
 			// It's a static factory method on the bean class.
+			// 工厂名为空，则其可能是一个静态工厂
+			// 静态工厂创建bean，必须要提供工厂的全类名
 			if (!mbd.hasBeanClass()) {
 				throw new BeanDefinitionStoreException(mbd.getResourceDescription(), beanName,
 						"bean definition declares neither a bean class nor a factory-bean reference");
@@ -392,6 +399,9 @@ class ConstructorResolver {
 		ArgumentsHolder argsHolderToUse = null;
 		Object[] argsToUse = null;
 
+		// todo 注意一点，当外部参数存在时，就不会走缓存，因为外部参数可变
+
+		// 获取构造函数参数   explicit:明确的
 		if (explicitArgs != null) {
 			argsToUse = explicitArgs;
 		}
@@ -407,6 +417,9 @@ class ConstructorResolver {
 					}
 				}
 			}
+			// 缓存中存在,则解析存储在 BeanDefinition 中的参数
+			// 如给定方法的构造函数 A(int ,int )，则通过此方法后就会把配置文件中的("1","1")转换为 (1,1)
+			// 缓存中的值可能是原始值也有可能是最终值
 			if (argsToResolve != null) {
 				argsToUse = resolvePreparedArguments(beanName, mbd, bw, factoryMethodToUse, argsToResolve);
 			}
@@ -417,6 +430,7 @@ class ConstructorResolver {
 			// Try all methods with this name to see if they match the given arguments.
 			factoryClass = ClassUtils.getUserClass(factoryClass);
 
+			// 获取可访问的所有方法， 并根据isStatic和factory-method比较，获取可能用到的Method
 			Method[] rawCandidates = getCandidateMethods(factoryClass, mbd);
 			List<Method> candidateList = new ArrayList<>();
 			for (Method candidate : rawCandidates) {
@@ -424,10 +438,12 @@ class ConstructorResolver {
 					candidateList.add(candidate);
 				}
 			}
+			// 排序 public升序， 参数个数降序
 			Method[] candidates = candidateList.toArray(new Method[0]);
 			AutowireUtils.sortFactoryMethods(candidates);
 
 			ConstructorArgumentValues resolvedValues = null;
+			// autowiring表示是否允许从 Spring IoC 容器查找依赖
 			boolean autowiring = (mbd.getResolvedAutowireMode() == AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR);
 			int minTypeDiffWeight = Integer.MAX_VALUE;
 			Set<Method> ambiguousFactoryMethods = null;
@@ -439,6 +455,7 @@ class ConstructorResolver {
 			else {
 				// We don't have arguments passed in programmatically, so we need to resolve the
 				// arguments specified in the constructor arguments held in the bean definition.
+				// 解析配置文件，并返回参数个数
 				if (mbd.hasConstructorArgumentValues()) {
 					ConstructorArgumentValues cargs = mbd.getConstructorArgumentValues();
 					resolvedValues = new ConstructorArgumentValues();
@@ -459,6 +476,7 @@ class ConstructorResolver {
 
 					if (explicitArgs != null) {
 						// Explicit arguments given -> arguments length must match exactly.
+						// 外部参数存在时，则必须与构造器参数个数一致
 						if (paramTypes.length != explicitArgs.length) {
 							continue;
 						}
@@ -488,6 +506,8 @@ class ConstructorResolver {
 						}
 					}
 
+					// 用于确认构造方法factoryMethodToUse
+					// 计算权重，越小越靠前， 有且只有一个时才正常
 					int typeDiffWeight = (mbd.isLenientConstructorResolution() ?
 							argsHolder.getTypeDifferenceWeight(paramTypes) : argsHolder.getAssignabilityWeight(paramTypes));
 					// Choose this factory method if it represents the closest match.
@@ -569,6 +589,7 @@ class ConstructorResolver {
 		}
 
 		try {
+			// 反射实例化
 			Object beanInstance;
 
 			if (System.getSecurityManager() != null) {

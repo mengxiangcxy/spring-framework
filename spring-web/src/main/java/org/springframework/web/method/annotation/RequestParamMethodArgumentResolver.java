@@ -72,6 +72,9 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author Brian Clozel
  * @since 3.1
  * @see RequestParamMapMethodArgumentResolver
+ *
+ * 解析注释了@RequestParam参数， MultipartFile类型的，以及没有注释的基本类型。
+ * 如果是Map类型的，则必须定义name， 否则由{@link RequestParamMapMethodArgumentResolver}解析
  */
 public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethodArgumentResolver
 		implements UriComponentsContributor {

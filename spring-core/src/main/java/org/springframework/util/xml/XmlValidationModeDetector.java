@@ -85,16 +85,16 @@ public class XmlValidationModeDetector {
 	 * @param inputStream the InputStream to parse
 	 * @throws IOException in case of I/O failure
 	 * @see #VALIDATION_DTD
-	 * @see #VALIDATION_XSD
+	 * @see #VALIDATION_XSD   读取xml文件，判断是DTD还是XSD
 	 */
 	public int detectValidationMode(InputStream inputStream) throws IOException {
-		// Peek into the file to look for DOCTYPE.
+		// Peek into the file to look for DOCTYPE.  窥视该文件以查找DOCTYPE。
 		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 		try {
 			boolean isDtdValidated = false;
 			String content;
 			while ((content = reader.readLine()) != null) {
-				content = consumeCommentTokens(content);
+				content = consumeCommentTokens(content); // 判断是否是注释
 				if (this.inComment || !StringUtils.hasText(content)) {
 					continue;
 				}
@@ -138,7 +138,7 @@ public class XmlValidationModeDetector {
 		}
 		int openTagIndex = content.indexOf('<');
 		return (openTagIndex > -1 && (content.length() > openTagIndex + 1) &&
-				Character.isLetter(content.charAt(openTagIndex + 1)));
+				Character.isLetter(content.charAt(openTagIndex + 1)));  // 包含'<'，且后面有内容，为字母
 	}
 
 	/**

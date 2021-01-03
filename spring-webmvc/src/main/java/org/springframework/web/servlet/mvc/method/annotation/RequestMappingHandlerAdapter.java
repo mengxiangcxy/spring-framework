@@ -131,16 +131,22 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 	@Nullable
 	private List<HandlerMethodArgumentResolver> customArgumentResolvers;
-
+	/**
+	 * 用于给处理器方法和注释了@ModelAttribute 的方法设置参数
+	 */
 	@Nullable
 	private HandlerMethodArgumentResolverComposite argumentResolvers;
-
+	/**
+	 * 用于给注释了@InitBinder的方法设置参数
+	 */
 	@Nullable
 	private HandlerMethodArgumentResolverComposite initBinderArgumentResolvers;
 
 	@Nullable
 	private List<HandlerMethodReturnValueHandler> customReturnValueHandlers;
-
+	/**
+	 * 用于将处理器返回值处理成ModelAndView
+	 */
 	@Nullable
 	private HandlerMethodReturnValueHandlerComposite returnValueHandlers;
 
@@ -188,7 +194,9 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	private final Map<ControllerAdviceBean, Set<Method>> initBinderAdviceCache = new LinkedHashMap<>();
 
 	private final Map<Class<?>, Set<Method>> modelAttributeCache = new ConcurrentHashMap<>(64);
-
+	/**
+	 * 用于缓存@ControllerAdvice内定义的@ModelAttribute和@InitBinder的方法, 这是全局的
+	 */
 	private final Map<ControllerAdviceBean, Set<Method>> modelAttributeAdviceCache = new LinkedHashMap<>();
 
 
@@ -580,7 +588,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			this.returnValueHandlers = new HandlerMethodReturnValueHandlerComposite().addHandlers(handlers);
 		}
 	}
-
+	// 扫描@ControllerAdvice
 	private void initControllerAdviceCache() {
 		if (getApplicationContext() == null) {
 			return;
@@ -867,6 +875,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			invocableMethod.setDataBinderFactory(binderFactory);
 			invocableMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);
 
+			// 传递参数的容器
 			ModelAndViewContainer mavContainer = new ModelAndViewContainer();
 			mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));
 			modelFactory.initModel(webRequest, mavContainer, invocableMethod);
@@ -874,7 +883,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 
 			AsyncWebRequest asyncWebRequest = WebAsyncUtils.createAsyncWebRequest(request, response);
 			asyncWebRequest.setTimeout(this.asyncRequestTimeout);
-
+			// 异步支持
 			WebAsyncManager asyncManager = WebAsyncUtils.getAsyncManager(request);
 			asyncManager.setTaskExecutor(this.taskExecutor);
 			asyncManager.setAsyncWebRequest(asyncWebRequest);
@@ -888,6 +897,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 				if (logger.isDebugEnabled()) {
 					logger.debug("Found concurrent result value [" + result + "]");
 				}
+				// 异步执行已结束，包装invocableMethod
 				invocableMethod = invocableMethod.wrapConcurrentResult(result);
 			}
 

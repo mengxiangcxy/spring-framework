@@ -40,14 +40,17 @@ public class HandlerExecutionChain {
 
 	private static final Log logger = LogFactory.getLog(HandlerExecutionChain.class);
 
+	// 处理器
 	private final Object handler;
 
+	// 拦截器数组
 	@Nullable
 	private HandlerInterceptor[] interceptors;
 
 	@Nullable
 	private List<HandlerInterceptor> interceptorList;
 
+	// 已执行过的拦截器下标(成功的)
 	private int interceptorIndex = -1;
 
 
@@ -134,6 +137,7 @@ public class HandlerExecutionChain {
 			for (int i = 0; i < interceptors.length; i++) {
 				HandlerInterceptor interceptor = interceptors[i];
 				if (!interceptor.preHandle(request, response, this.handler)) {
+					// 倒序执行已成功拦截器的afterCompletion(), 且不包含自身
 					triggerAfterCompletion(request, response, null);
 					return false;
 				}

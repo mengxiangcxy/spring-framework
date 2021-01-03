@@ -133,6 +133,7 @@ import org.springframework.web.util.WebUtils;
  * @see #setContextConfigLocation
  * @see #setContextInitializerClasses
  * @see #setNamespace
+ * 负责初始化 Spring Servlet WebApplicationContext 容器
  */
 @SuppressWarnings("serial")
 public abstract class FrameworkServlet extends HttpServletBean implements ApplicationContextAware {
@@ -191,6 +192,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	private String contextInitializerClasses;
 
 	/** Should we publish the context as a ServletContext attribute? */
+	// 是否将 {@link #webApplicationContext} 设置到 {@link ServletContext} 的属性中
 	private boolean publishContext = true;
 
 	/** Should we publish a ServletRequestHandledEvent at the end of each request? */
@@ -213,6 +215,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	private boolean webApplicationContextInjected = false;
 
 	/** Flag used to detect whether onRefresh has already been called */
+	// 标记是否接收到 ContextRefreshedEvent 事件。即 {@link #onApplicationEvent(ContextRefreshedEvent)}
 	private volatile boolean refreshEventReceived = false;
 
 	/** Monitor for synchronized onRefresh execution */
@@ -557,6 +560,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			wac = createWebApplicationContext(rootContext);
 		}
 
+		// <3> 如果未触发刷新事件，则主动触发刷新事件
 		if (!this.refreshEventReceived) {
 			// Either the context is not a ConfigurableApplicationContext with refresh
 			// support or the context injected at construction time had already been

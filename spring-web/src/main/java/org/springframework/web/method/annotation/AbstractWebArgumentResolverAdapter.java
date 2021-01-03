@@ -46,6 +46,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  * @author Arjen Poutsma
  * @author Rossen Stoyanchev
  * @since 3.1
+ *
+ * 用做WebArgumentResolver解析器的适配器
  */
 public abstract class AbstractWebArgumentResolverAdapter implements HandlerMethodArgumentResolver {
 

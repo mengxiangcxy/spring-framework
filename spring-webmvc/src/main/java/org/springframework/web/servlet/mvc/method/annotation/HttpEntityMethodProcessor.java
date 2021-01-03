@@ -66,6 +66,8 @@ import org.springframework.web.servlet.support.RequestContextUtils;
  * @author Rossen Stoyanchev
  * @author Brian Clozel
  * @since 3.1
+ *
+ * 解析HttpEntity 和 RequestEntity
  */
 public class HttpEntityMethodProcessor extends AbstractMessageConverterMethodProcessor {
 

@@ -46,6 +46,8 @@ import org.springframework.core.type.AnnotationMetadata;
  * @see Import
  * @see ImportSelector
  * @see Configuration
+ *
+ * ImportBeanDefinitionRegistrar需要配合@Configuration和@Import注解
  */
 public interface ImportBeanDefinitionRegistrar {
 

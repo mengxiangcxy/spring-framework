@@ -69,6 +69,8 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * @see #postProcessAfterInstantiation
 	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getBeanClass()
 	 * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getFactoryMethodName()
+	 *
+	 * todo postProcessBeforeInstantiation方法的作用在目标对象被实例化之前调用的方法，可以返回目标实例的一个代理用来代替目标实例
 	 */
 	@Nullable
 	default Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
@@ -111,6 +113,8 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
 	 * PropertyValues instance), or {@code null} to skip property population
 	 * @throws org.springframework.beans.BeansException in case of errors
 	 * @see org.springframework.beans.MutablePropertyValues
+	 *
+	 * todo postProcessPropertyValues方法的作用在属性被设置到目标实例之前调用，可以修改属性的设置
 	 */
 	@Nullable
 	default PropertyValues postProcessPropertyValues(

@@ -48,7 +48,10 @@ import org.springframework.web.bind.support.SimpleSessionStatus;
  * @since 3.1
  */
 public class ModelAndViewContainer {
-
+	/**
+	 * 等同于RequestMappingHandlerAdapter.ignoreDefaultModelOnRedirect
+	 * {@link org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerAdapter#invokeHandlerMethod(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod)}
+	 */
 	private boolean ignoreDefaultModelOnRedirect = false;
 
 	@Nullable
@@ -58,18 +61,18 @@ public class ModelAndViewContainer {
 
 	@Nullable
 	private ModelMap redirectModel;
-
+	// 请求返回redirect视图的标志
 	private boolean redirectModelScenario = false;
-
+	//
 	@Nullable
 	private HttpStatus status;
 
 	private final Set<String> noBinding = new HashSet<>(4);
 
 	private final Set<String> bindingDisabled = new HashSet<>(4);
-
+	// 用于设置SessionAttribute使用完的标志
 	private final SessionStatus sessionStatus = new SimpleSessionStatus();
-
+	// 请求是否处理完的标志
 	private boolean requestHandled = false;
 
 

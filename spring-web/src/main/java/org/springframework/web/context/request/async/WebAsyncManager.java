@@ -400,6 +400,9 @@ public final class WebAsyncManager {
 	 * @throws Exception if concurrent processing failed to start
 	 * @see #getConcurrentResult()
 	 * @see #getConcurrentResultContext()
+	 * 1. 启动异步处理
+	 * 2. 给Request设置相应属性（主要包括timeout，timeoutHandler，completionHandler）
+	 * 3. 在相应位置调用相应的拦截器
 	 */
 	public void startDeferredResultProcessing(
 			final DeferredResult<?> deferredResult, Object... processingContext) throws Exception {
@@ -444,6 +447,7 @@ public final class WebAsyncManager {
 				-> interceptorChain.triggerAfterCompletion(this.asyncWebRequest, deferredResult));
 
 		interceptorChain.applyBeforeConcurrentHandling(this.asyncWebRequest, deferredResult);
+		// 开启异步
 		startAsyncProcessing(processingContext);
 
 		try {

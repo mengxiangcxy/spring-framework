@@ -100,6 +100,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Constant that indicates no dependency check at all.
+	 * 表示根本没有依赖项检查
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_NONE = 0;
@@ -162,7 +163,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	@Nullable
 	private Supplier<?> instanceSupplier;
-
+	// 允许访问非公开的构造器和方法
 	private boolean nonPublicAccessAllowed = true;
 
 	private boolean lenientConstructorResolution = true;
@@ -1090,6 +1091,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 		}
 		else if (count == 1) {
 			// Mark override as not overloaded, to avoid the overhead of arg type checking.
+			// 标识方法没有被重载
 			mo.setOverloaded(false);
 		}
 	}

@@ -51,6 +51,8 @@ import org.springframework.web.multipart.MultipartFile;
  * @see #setFieldMarkerPrefix
  * @see #setFieldDefaultPrefix
  * @see ServletRequestDataBinder
+ *
+ * 实现参数与String类型之间的转换
  */
 public class WebDataBinder extends DataBinder {
 

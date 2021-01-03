@@ -55,6 +55,7 @@ public class DefaultTransactionStatus extends AbstractTransactionStatus {
 
 	private final boolean newTransaction;
 
+	// 如果为给定事务打开了新的事务同步  该值为true    // 是否开启 事务同步器 <- 其实就是在 TransactionSynchronousManager 中注册属性信息
 	private final boolean newSynchronization;
 
 	private final boolean readOnly;

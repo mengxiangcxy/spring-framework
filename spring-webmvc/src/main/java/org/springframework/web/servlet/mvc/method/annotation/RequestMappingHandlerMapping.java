@@ -52,6 +52,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMappi
  * @author Rossen Stoyanchev
  * @author Sam Brannen
  * @since 3.1
+ * 基于 @RequestMapping 注解来构建 RequestMappingInfo 对象
  */
 public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMapping
 		implements MatchableHandlerMapping, EmbeddedValueResolverAware {
@@ -189,8 +190,10 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	@Override
 	@Nullable
 	protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
+		// 基于方法上的 @RequestMapping 注解，创建 RequestMappingInfo 对象
 		RequestMappingInfo info = createRequestMappingInfo(method);
 		if (info != null) {
+			// 基于类上的 @RequestMapping 注解，合并进去
 			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType);
 			if (typeInfo != null) {
 				info = typeInfo.combine(info);
@@ -293,8 +296,11 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 		if (matchingInfo == null) {
 			return null;
 		}
+		// 获得请求路径的集合
 		Set<String> patterns = matchingInfo.getPatternsCondition().getPatterns();
+		// 获得请求的路径
 		String lookupPath = getUrlPathHelper().getLookupPathForRequest(request);
+		// 创建 RequestMatchResult 结果
 		return new RequestMatchResult(patterns.iterator().next(), lookupPath, getPathMatcher());
 	}
 

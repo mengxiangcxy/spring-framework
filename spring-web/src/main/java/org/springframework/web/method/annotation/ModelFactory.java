@@ -58,11 +58,13 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  *
  * @author Rossen Stoyanchev
  * @since 3.1
+ * 1. 在处理器具体处理之前，对Model初始化
+ * 2. 在处理后对Model参数进行更新
  */
 public final class ModelFactory {
 
 	private static final Log logger = LogFactory.getLog(ModelFactory.class);
-
+	// @ModelAttribute的方法
 	private final List<ModelMethod> modelMethods = new ArrayList<>();
 
 	private final WebDataBinderFactory dataBinderFactory;
@@ -105,13 +107,14 @@ public final class ModelFactory {
 	 */
 	public void initModel(NativeWebRequest request, ModelAndViewContainer container, HandlerMethod handlerMethod)
 			throws Exception {
-
+		// 当前处理器保存的
 		Map<String, ?> sessionAttributes = this.sessionAttributesHandler.retrieveAttributes(request);
 		container.mergeAttributes(sessionAttributes);
 		invokeModelAttributeMethods(request, container);
 
 		for (String name : findSessionAttributeArguments(handlerMethod)) {
 			if (!container.containsAttribute(name)) {
+				// 从全局查询
 				Object value = this.sessionAttributesHandler.retrieveAttribute(request, name);
 				if (value == null) {
 					throw new HttpSessionRequiredException("Expected session attribute '" + name + "'", name);

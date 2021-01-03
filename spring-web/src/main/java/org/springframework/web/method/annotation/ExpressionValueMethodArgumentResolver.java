@@ -38,6 +38,8 @@ import org.springframework.web.context.request.NativeWebRequest;
  *
  * @author Rossen Stoyanchev
  * @since 3.1
+ *
+ * 解析@Value
  */
 public class ExpressionValueMethodArgumentResolver extends AbstractNamedValueMethodArgumentResolver {
 

@@ -67,7 +67,7 @@ public abstract class AbstractAdvisingBeanPostProcessor extends ProxyProcessorSu
 			// Ignore AOP infrastructure such as scoped proxies.
 			return bean;
 		}
-
+		// 如果当前bean已经被aop，则向里面添加Advisor即可
 		if (bean instanceof Advised) {
 			Advised advised = (Advised) bean;
 			if (!advised.isFrozen() && isEligible(AopUtils.getTargetClass(bean))) {
